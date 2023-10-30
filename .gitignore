@@ -4,3 +4,6 @@
 examples/*
 !examples/*.c
 !examples/*.h
+tests/*
+!tests/*.c
+!tests/*.h

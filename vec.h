@@ -34,12 +34,39 @@ int vec_expand(char** data, size_t* len, size_t* cap, size_t size);
   ( _vec_splice(vec_unpack(V), start, count),\
     (V)->len -= (count) )
 
+#define vec_insert(V, I, X)\
+    (_vec_insert(vec_unpack(V), I) ? -1 : ((V)->data[I] = (X), 0), (V)->len++, 0)
+
+#define vec_sort(V, Fn)\
+  qsort((V)->data, (V)->len, sizeof(*(V)->data), Fn)
+
 void _vec_splice(char **data, size_t *length, size_t *capacity, size_t memsz, size_t start, size_t count);
+int _vec_insert(char **data, size_t *length, size_t *capacity, size_t memsz, size_t idx);
 
 typedef vec_t(int) vec_int_t;
 typedef vec_t(char) vec_char_t;
 typedef vec_t(void*) vec_void_t;
 typedef vec_t(char*) vec_str_t;
 typedef vec_t(long) vec_long_t;
+
+static inline
+int vec_int_cmp(const void* a, const void* b) {
+    return *(int*)a - *(int*)b;
+}
+
+static inline
+int vec_long_cmp(const void* a, const void* b) {
+    return *(long*)a - *(long*)b;
+}
+
+static inline
+int vec_char_cmp(const void* a, const void* b) {
+    return *(char*)a - *(char*)b;
+}
+
+static inline
+int vec_str_cmp(const void* a, const void* b) {
+    return strcmp((char*)a, (char*)b);
+}
 
 #endif // __DMC_VEC_H__

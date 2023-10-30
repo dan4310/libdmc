@@ -12,10 +12,18 @@ int vec_expand(char** data, size_t* len, size_t* cap, size_t size) {
     return 0;
 }
 
-void _vec_splice(char **data, size_t *length, size_t *capacity, size_t memsz, size_t start, size_t count
-) {
+void _vec_splice(char **data, size_t *length, size_t *capacity, size_t memsz, size_t start, size_t count) {
   (void) capacity;
   memmove(*data + start * memsz,
           *data + (start + count) * memsz,
           (*length - start - count) * memsz);
+}
+
+int _vec_insert(char **data, size_t *length, size_t *capacity, size_t memsz, size_t idx) {
+  int err = vec_expand(data, length, capacity, memsz);
+  if (err) return err;
+  memmove(*data + (idx + 1) * memsz,
+          *data + idx * memsz,
+          (*length - idx) * memsz);
+  return 0;
 }

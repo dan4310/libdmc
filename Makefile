@@ -1,4 +1,4 @@
-.PHONY: clean build examples install uninstall
+.PHONY: clean build tests install uninstall
 
 CC = cc
 CFLAGS = -Wall
@@ -7,8 +7,8 @@ NAME = dmc
 SRC = log.c vec.c
 OBJ = $(patsubst %.c,%.o,${SRC})
 
-_EXAMPLES = log vec
-EXAMPLES = $(patsubst %,examples/%,${_EXAMPLES})
+_TESTS = log vec
+TESTS = $(patsubst %,tests/%,${_TESTS})
 
 %.o: %.c
 	${CC} ${CFLAGS} -c -o $@ $<
@@ -21,18 +21,18 @@ lib${NAME}.so: ${OBJ}
 	${CC} ${CFLAGS} --shared -o $@ $^
 	chmod 755 $@
 
-examples/%: examples/%.c lib${NAME}_static.a
+tests/%: tests/%.c lib${NAME}_static.a
 	${CC} ${CFLAGS} -o $@ $< -L./ -l${NAME}_static
 
 clean:
 	rm -fv ${OBJ}
 	rm -fv lib${NAME}.so
 	rm -fv lib${NAME}_static.a
-	rm -fv ${EXAMPLES}
+	rm -fv ${TESTS}
 
 build: lib${NAME}_static.a lib${NAME}.so
 
-examples: ${EXAMPLES}
+tests: ${TESTS}
 
 install: lib${NAME}_static.a lib${NAME}.so
 	cp -fv $^ /usr/local/lib

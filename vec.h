@@ -14,7 +14,7 @@
 
 int vec_expand(char** data, size_t* len, size_t* cap, size_t size);
 
-#define vec_add(V, X) vec_expand(vec_unpack(V)); (V)->data[(V)->len++] = X
+#define vec_push(V, X) vec_expand(vec_unpack(V)); (V)->data[(V)->len++] = X
 #define vec_find(V, X, I)\
   do {\
     for ((I) = 0; (I) < (V)->len; (I)++) {\
@@ -35,7 +35,7 @@ int vec_expand(char** data, size_t* len, size_t* cap, size_t size);
     (V)->len -= (count) )
 
 #define vec_insert(V, I, X)\
-    (_vec_insert(vec_unpack(V), I) ? -1 : ((V)->data[I] = (X), 0), (V)->len++, 0)
+    (_vec_insert(vec_unpack(V), I) ? -1 : ((V)->data[I] = (X), 0), (V)->len++)
 
 #define vec_sort(V, Fn)\
   qsort((V)->data, (V)->len, sizeof(*(V)->data), Fn)

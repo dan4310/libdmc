@@ -18,7 +18,7 @@ int main(void) {
     vec_int_t v;
     vec_init(&v);
     for (size_t i = 0; i < 10; i++) {
-        vec_add(&v, rand());
+        vec_push(&v, rand());
     }
     vec_int_print(&v);
     printf("\n");
@@ -35,7 +35,7 @@ int main(void) {
     printf("sorted: ");
     vec_int_print(&v);
 
-    vec_add(&v, 25);
+    vec_push(&v, 25);
     vec_int_print(&v);
     vec_free(&v);
 

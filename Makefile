@@ -4,10 +4,10 @@ CC = cc
 CFLAGS = -Wall
 NAME = dmc
 
-SRC = log.c vec.c
+SRC = log.c vec.c utest.c
 OBJ = $(patsubst %.c,%.o,${SRC})
 
-_TESTS = log vec
+_TESTS = log vec utest
 TESTS = $(patsubst %,tests/%,${_TESTS})
 
 %.o: %.c

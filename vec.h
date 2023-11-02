@@ -9,13 +9,21 @@
 
 #define vec_unpack(V) (char**)&(V)->data, &(V)->len, &(V)->cap, sizeof(*(V)->data)
 
+#define vec_lit(A) { A, sizeof(A)/sizeof(A[0]), 0 }
+
 #define vec_init(V) memset((V), 0, sizeof(*(V)))
 #define vec_free(V) free((V)->data)
 
-int vec_expand(char** data, size_t* len, size_t* cap, size_t size);
+int vec_expand(char** data, size_t* len, size_t* cap, size_t size, size_t n);
+int _vec_cat(char** dest_data, size_t* dest_len, size_t* dest_cap, size_t dest_size,
+               char** src_data, size_t* src_len, size_t* src_cap, size_t src_size);
 
 #define vec_get(V, I) (V)->data[I]
-#define vec_push(V, X) vec_expand(vec_unpack(V)); (V)->data[(V)->len++] = X
+#define vec_len(V) (V)->len
+
+#define vec_push(V, X) vec_expand(vec_unpack(V), 1); (V)->data[(V)->len++] = X
+#define vec_cat(V, X) _vec_cat(vec_unpack(V), vec_unpack(V))
+
 #define vec_find(V, X, I)\
   do {\
     for ((I) = 0; (I) < (V)->len; (I)++) {\

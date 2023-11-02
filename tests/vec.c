@@ -71,10 +71,38 @@ utest_result_t vec_test_insert(void* _) {
     return UTEST_OK;
 }
 
+utest_result_t vec_test_cat(void* _) {
+    size_t n = 10;
+    vec_int_t a;
+    int c_arr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    const vec_int_t b = vec_lit(c_arr);
+    vec_init(&a);
+    for (int i = 0; i < n; i++) {
+        vec_push(&a, i);
+    }
+
+    vec_cat(&a, &b);
+    if (vec_len(&a) != n * 2) {
+        return UTEST_ERR;
+        vec_free(&a);
+    }
+
+    for (size_t i = 0; i < n; i++) {
+        if (vec_get(&b, i) != vec_get(&a, i + n)) {
+            vec_free(&a);
+            return UTEST_ERR;
+        }
+    }
+
+    vec_free(&a);
+    return UTEST_OK;
+}
+
 const utest_test_t vec_tests[] = {
     { "push", vec_test_push },
     { "remove", vec_test_remove },
     { "insert", vec_test_insert },
+    { "cat", vec_test_cat },
     { 0 }
 };
 

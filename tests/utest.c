@@ -29,6 +29,6 @@ const utest_suite_t my_suite = {
     my_tests
 };
 
-int main(int argc, const char* argv[]) {
+int main(int argc, char* argv[]) {
     return utest_suite_main(&my_suite, 0, argc, argv);
 }

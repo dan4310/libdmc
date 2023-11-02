@@ -1,43 +1,89 @@
 #include "../vec.h"
+#include "../utest.h"
 #include <stdio.h>
 #include <time.h>
 
-void vec_int_print(vec_int_t* v) {
-    printf("[ ");
-    for (size_t i = 0; i < v->len; i++) {
-        if (i < v->len - 1)
-            printf("%d, ", v->data[i]);
-        else
-         printf("%d ", v->data[i]);
-    }
-    printf("]\n");
-}
-
-int main(void) {
-    srand(time(NULL));
+utest_result_t vec_test_push(void* _) {
+    size_t n = 10;
     vec_int_t v;
     vec_init(&v);
-    for (size_t i = 0; i < 10; i++) {
-        vec_push(&v, rand());
+    for (size_t i = 0; i < n; i++) {
+        vec_push(&v, i);
     }
-    vec_int_print(&v);
-    printf("\n");
+    if (v.len != n)
+        return UTEST_ERR;
 
-    int i = 0;
-    vec_find(&v, v.data[3], i);
-    printf("found %d: %d\n", v.data[10], i);
-    vec_find(&v, 97, i);
-    printf("found %d: %d\n", 97, i);
-    vec_insert(&v, 4, 9999);
-    vec_int_print(&v);
+    for (size_t i  = 0; i < v.len; i++) {
+        if (v.data[i] != i) {
+            vec_free(&v);
+            return UTEST_ERR;
+        }
+    }
 
-    vec_sort(&v, vec_int_cmp);
-    printf("sorted: ");
-    vec_int_print(&v);
-
-    vec_push(&v, 25);
-    vec_int_print(&v);
     vec_free(&v);
+    return UTEST_OK;
+}
 
-    return 0;
+utest_result_t vec_test_remove(void* _) {
+    size_t n = 10;
+    vec_int_t v;
+    vec_init(&v);
+    for (size_t i = 0; i < n; i++) {
+        vec_push(&v, i);
+    }
+    if (v.len != n) {
+        vec_free(&v);
+        return UTEST_ERR;
+    }
+
+    for (size_t i  = 0; i < n; i++)
+        vec_remove(&v, i);
+
+    if (v.len != 0) {
+        vec_free(&v);
+        return UTEST_ERR;
+    }
+
+    vec_free(&v);
+    return UTEST_OK;
+}
+
+utest_result_t vec_test_insert(void* _) {
+    size_t n = 10;
+    vec_int_t v;
+    vec_init(&v);
+    for (int i = 0; i < n; i++) {
+        vec_push(&v, i);
+    }
+
+    vec_insert(&v, 7, 5);
+    if (vec_get(&v, 7) != 5) {
+        vec_free(&v);
+        return UTEST_ERR;
+    }
+
+    vec_insert(&v, 9, 100);
+    if (vec_get(&v, 9) != 100) {
+        vec_free(&v);
+        return UTEST_ERR;
+    }
+    vec_free(&v);
+    return UTEST_OK;
+}
+
+const utest_test_t vec_tests[] = {
+    { "push", vec_test_push },
+    { "remove", vec_test_remove },
+    { "insert", vec_test_insert },
+    { 0 }
+};
+
+const utest_suite_t vec_test_suite = {
+    "vec",
+    vec_tests
+};
+
+
+int main(int argc, char* argv[]) {
+    return utest_suite_main(&vec_test_suite, 0, argc, argv);
 }

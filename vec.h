@@ -14,6 +14,7 @@
 
 int vec_expand(char** data, size_t* len, size_t* cap, size_t size);
 
+#define vec_get(V, I) (V)->data[I]
 #define vec_push(V, X) vec_expand(vec_unpack(V)); (V)->data[(V)->len++] = X
 #define vec_find(V, X, I)\
   do {\
@@ -39,6 +40,8 @@ int vec_expand(char** data, size_t* len, size_t* cap, size_t size);
 
 #define vec_sort(V, Fn)\
   qsort((V)->data, (V)->len, sizeof(*(V)->data), Fn)
+
+#define vec_foreach(V, i) for (i = 0; i < (V)->len; i++)
 
 void _vec_splice(char **data, size_t *length, size_t *capacity, size_t memsz, size_t start, size_t count);
 int _vec_insert(char **data, size_t *length, size_t *capacity, size_t memsz, size_t idx);

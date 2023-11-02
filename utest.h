@@ -19,6 +19,6 @@ typedef struct utest_suite {
     const utest_test_t* tests;
 } utest_suite_t;
 
-int utest_suite_main(const utest_suite_t* suite, void* data, int argc, const char* argv[]);
+int utest_suite_main(const utest_suite_t* suite, void* data, int argc, char* argv[]);
 
 #endif // __DMC_UTEST_H__
